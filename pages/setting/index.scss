@@ -1,0 +1,103 @@
+page{
+	background: #5B6A81;
+}
+.header{
+	height: 50px;
+	width: 100%;
+	background: #3E4F66 ;
+	padding: 0 28px;
+	display: flex;
+	align-items: center;
+	.iconWrapper{
+		width: 24px;
+		height: 24px;
+		box-sizing: border-box;
+		margin-right: 5px;
+		image{
+			width: 100%;
+			height: 100%;
+		}
+	}
+		
+	text{
+		font-size: 14px;
+		color: #fff;
+	}
+	
+}
+.main{
+	width: 85%;
+	margin-top: 20px;
+	// min-width: 824px;
+	// height: 300px;
+	margin: 0 auto;
+	.manifest_item{
+		color: #fff;
+		.title{
+			height: 40px;
+			border-bottom: 1px solid #fff;
+			// padding-bottom: 10px;
+			display: flex;
+			align-items: center;
+		}
+		.manifest_list{
+			padding-left: 112px;
+			padding-top: 10px;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-around;
+			margin-top: 20px;
+			.input_wrapper{
+				display: flex;
+				flex-direction: column;
+				.radioGroup{
+					display: flex;
+					flex-direction: column;
+					radio{
+						transform:scale(0.7)
+					}
+				}
+				// 按压
+				.press_wrapper{
+					display: flex;
+					flex-direction: column;
+					height: 70px;
+					flex-wrap: wrap;
+				}
+			}
+		}
+	}
+}
+.item{
+	margin-top: 5px;
+}
+.Two{
+	display: flex;
+}
+.footer{
+	display: flex;
+	padding:20px  30px;
+	width: 100%;
+	justify-content: space-between;
+	box-sizing: border-box;
+	.left,.right{
+		display: flex;
+		width: 200px;
+		justify-content: space-around;
+	}
+	.item1,.item2{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background:#3E4F66 ;
+		color: #fff;
+		font-size: 13px;
+		width: 80px;
+		height: 30px;
+		border-radius: 5px;
+	}
+	.item2{
+		background: #fff;
+		color: #3E4F66;
+	}
+}

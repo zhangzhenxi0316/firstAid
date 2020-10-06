@@ -6,7 +6,15 @@
 				"navigationBarTitleText": "uni-app"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/setting/setting",
+            "style" : {}
+        },{
+            "path" : "pages/grades/grades",
+            "style" : {}
+        }
+        
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

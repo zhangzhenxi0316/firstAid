@@ -1,0 +1,143 @@
+.grades_wrapper{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin: 13px;
+}
+
+.header_wrapper{
+	border: 1px dashed #0177A6;
+	height: 40px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	
+}
+
+.header_title{
+	height: 100%;
+	text-align: center;
+	font-size: 14px;
+	line-height: 40px;
+	margin-left: 80px;
+	font-weight: 550;
+}
+
+.print_btn{
+	height: 30px;
+	width: 138px;
+	border: 1px solid #FB4D4D;
+	border-radius: 4px;
+	font-size: 14px;
+	color: #FB4D4D;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	margin-left: 720px;
+}
+
+.header_wrapper .icon{
+	font-size: 14px;
+	margin-right: 10px;
+}
+
+
+/*导航栏底部文字标题开始*/
+.header_bottom{
+	width: 400px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-top: 10px;
+}
+
+.header_bottom .title{
+	font-size: 20px;
+	font-weight: 550;
+	margin-bottom: 5px;
+}
+.header_bottom .date{
+	font-size: 14px;
+}
+/*导航栏底部文字标题结束*/
+
+
+/*底部开始*/
+.bottom_wrapper{
+	width: 918px;
+	display: flex;
+	flex-direction: row;
+	margin-top: 15px;
+}
+
+.bottom_left{
+	width: 150px;
+	/* height: 100%; */
+	border: 1px solid #BBBBBB;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.bottom_left .title{
+	width: 56px;
+	height: 20px;
+	font-size: 14px;
+}
+
+.bottom_left .left_item{
+	width: 150px;
+	height: 20px;
+	font-size: 12px;
+	line-height: 12px;
+	margin-left: 35px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-top: 47px;
+}
+
+.bottom_left .left_item text{
+	margin-left: 12px;
+}
+
+.bottom_right{
+	width: 760px;
+}
+
+.bottom_right .right_item{
+	width: 100%;
+	border: 1px dashed #BBBBBB;
+	padding: 5px 0 5px 0;
+	display: flex;
+	flex-direction: row;
+}
+
+.bottom_right .right_item view{
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+}
+
+.bottom_right .right_item view:first-child{
+	font-size: 14px;
+	margin-left: 20px;
+	width: 196px;
+}
+.bottom_right .right_item view:nth-child(2){
+	font-size: 12px;
+	width: 196px;
+}
+.bottom_right .right_item view:nth-child(3){
+	font-size: 12px;
+	width: 195px;
+}
+.bottom_right .right_item view:nth-child(4){
+	font-size: 12px;
+	width: 155px;
+}
+
