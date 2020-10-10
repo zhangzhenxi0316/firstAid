@@ -14,6 +14,14 @@
             "style" : {}
         }
         
+        ,{
+            "path" : "pages/login/login",
+            "style" : {} 
+        } ,
+		{
+		    "path" : "pages/registry/registry",
+		    "style" : {}
+		}
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

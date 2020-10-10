@@ -1,18 +1,20 @@
 page{
-	background: #5B6A81;
+	background: #5B6A81 !important;
+	font-size: 8.82rpx;
 }
 .header{
-	height: 50px;
+	height: 36.76rpx;
 	width: 100%;
 	background: #3E4F66 ;
-	padding: 0 28px;
+	padding: 0 20.58rpx;
 	display: flex;
 	align-items: center;
 	.iconWrapper{
-		width: 24px;
-		height: 24px;
-		box-sizing: border-box;
-		margin-right: 5px;
+		width: 17.64rpx;
+		height: 17.64rpx;
+		// box-sizing: border-box;
+		margin-right: 3.67rpx;
+		overflow: hidden;
 		image{
 			width: 100%;
 			height: 100%;
@@ -20,33 +22,34 @@ page{
 	}
 		
 	text{
-		font-size: 14px;
+		font-size: 10.29rpx;
 		color: #fff;
 	}
 	
 }
 .main{
 	width: 85%;
-	margin-top: 20px;
+	margin-top: 14.7rpx;
 	// min-width: 824px;
 	// height: 300px;
 	margin: 0 auto;
 	.manifest_item{
 		color: #fff;
 		.title{
-			height: 40px;
-			border-bottom: 1px solid #fff;
+			font-size:10.29rpx;
+			height: 29.41rpx;
+			border-bottom: 0.73rpx solid #fff;
 			// padding-bottom: 10px;
 			display: flex;
 			align-items: center;
 		}
 		.manifest_list{
-			padding-left: 112px;
-			padding-top: 10px;
+			padding-left: 82.35rpx;
+			padding-top: 7.35rpx;
 			display: flex;
 			flex-direction: column;
 			justify-content: space-around;
-			margin-top: 20px;
+			margin-top: 14.7rpx;
 			.input_wrapper{
 				display: flex;
 				flex-direction: column;
@@ -61,7 +64,7 @@ page{
 				.press_wrapper{
 					display: flex;
 					flex-direction: column;
-					height: 70px;
+					height: 65.47rpx;
 					flex-wrap: wrap;
 				}
 			}
@@ -69,20 +72,21 @@ page{
 	}
 }
 .item{
-	margin-top: 5px;
+	font-size: 8.82rpx;
+	margin-top: 3.67rpx;
 }
 .Two{
 	display: flex;
 }
 .footer{
 	display: flex;
-	padding:20px  30px;
+	padding:14.7rpx  22.05rpx;
 	width: 100%;
 	justify-content: space-between;
 	box-sizing: border-box;
 	.left,.right{
 		display: flex;
-		width: 200px;
+		width: 147.05rpx;
 		justify-content: space-around;
 	}
 	.item1,.item2{
@@ -91,13 +95,13 @@ page{
 		align-items: center;
 		background:#3E4F66 ;
 		color: #fff;
-		font-size: 13px;
-		width: 80px;
-		height: 30px;
-		border-radius: 5px;
+		font-size: 9.55rpx;
+		width: 58.82rpx;
+		height: 22.05rpx;
+		border-radius: 3.67rpx;
 	}
 	.item2{
 		background: #fff;
 		color: #3E4F66;
 	}
-}
+} 

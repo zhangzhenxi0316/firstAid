@@ -1,23 +1,23 @@
 .inputWrapper{
 	display: flex;
-	font-size: 12px;
+	font-size: 8.82rpx;
 	align-items: center;
 	.title{
-		
+		border-bottom: 0 !important;
 		color: #fff;
-		margin-right: 10px;
+		margin-right: 7.35rpx;
 	}
 	.picker{
-		width: 108px;
-		height: 20px;
+		width: 79.41rpx;
+		height: 14.7rpx;
 		background: #3E4F66;
-		margin-right: 5px;
-		border-radius: 5px;
+		margin-right: 3.67rpx;
+		border-radius: 3.67rpx;
 		// text-align: end;
 		display: flex;
 		justify-content: flex-end;
 		align-items: center;
 		
-		padding: 3px;
+		padding: 2.2rpx; 
 	}
 }

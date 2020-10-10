@@ -41,11 +41,13 @@
 					<view class="input_wrapper">
 						
 						<view class="press_wrapper">
+							<!-- <view class="left"></view> -->
 							<view class="Two">
 								<inputComponent :defaultV="String(setting.press.pressStart)"  @hanleInputChange="handleDeepStartChange"   type="press" class="item" title="按压深度 " unit="至" :arr="percent" ></inputComponent>
 								<inputComponent :defaultV="String(setting.press.pressEnd)"  @hanleInputChange="handleDeepEndChange" width="0" type="press"  title=" " unit="厘米" :arr="percent" ></inputComponent>
 							</view>
 							<inputComponent  :defaultV="String(setting.press.pressPercent)"  @hanleInputChange="handlePercentChange"  type="press"  class="item" title="按压达标率 " unit="%" :arr="numArr"></inputComponent>
+							
 							<inputComponent  :defaultV="String(setting.press.first)"  @hanleInputChange="handleTimeStartChange" type="press"  class="item" title="首次按压中断时间上限 " width="140" :arr="numArr"></inputComponent>
 							<inputComponent  :defaultV="String(setting.press.other)" @hanleInputChange="handleTimeOtherChange"  type="press"  class="item" title="其他按压中断时间上限 " width="140" :arr="numArr"></inputComponent>
 						</view>
@@ -125,7 +127,7 @@
 						maxTime:0,
 						TotalLoop:0,
 						// 单选第一个为true
-						isCorrent:true,
+						isCorrent:1,
 					},
 					press:{
 						pressStart:0,
@@ -196,6 +198,6 @@
 	}
 </script>
 
-<style scoped lang="scss">
+<style  lang="scss">
 @import "./index.scss"
 </style>

@@ -2,7 +2,11 @@ page {
 		background: #e4e4e4;
 
 	}
-
+.space{
+	height: var(--status-bar-height);
+	width: 100%;
+	background: #E5EFFE;
+}
 	.box {
 
 		// 头部顶部
@@ -11,9 +15,9 @@ page {
 
 			.header_banner {
 				display: flex;
-				padding: 0 25px;
+				padding: 0 18.38rpx;
 				box-sizing: border-box;
-				height: 45px;
+				height: 33.08rpx;
 				background: #E5EFFE;
 
 				.userinfo {
@@ -30,9 +34,9 @@ page {
 			// 头部控制条
 			.header_control {
 				display: flex;
-				font-size: 12px;
-				height: 55px;
-				padding: 0 25px;
+				font-size: 8.82rpx;
+				height: 40.44rpx;
+				padding: 0 18.38rpx;
 				background: rgb(218, 231, 240);
 				background: linear-gradient(31deg, rgba(218, 231, 240, 1) 63%, rgba(147, 165, 192, 1) 100%);
 				align-items: center;
@@ -40,10 +44,10 @@ page {
 
 				.mode_control {
 					display: flex;
-					align-items: center;
+					align-items: center; 
 
 					.mode_item {
-						margin-right: 10px;
+						margin-right: 7.35rpx;
 						display: flex;
 						align-items: center;
 
@@ -51,15 +55,15 @@ page {
 
 					// 开始停止按钮
 					.button_control {
-						border: 2px solid #0C74B7;
+						border: 1.47rpx solid #0C74B7;
 						color: #0C74B7;
-						height: 30px;
-						width: 80px;
+						height: 22.05rpx;
+						width: 58.82rpx;
 						display: flex;
 						justify-content: center;
 						align-items: center;
-						border-radius: 15px;
-						margin-left: 15px;
+						border-radius: 11.02rpx;
+						margin-left: 11.02rpx;
 					}
 				}
 
@@ -67,17 +71,17 @@ page {
 				.setting {
 					color: #fff;
 					display: flex;
-					width: 205px;
+					width: 180.73rpx;
 
 					.setting_item {
-						margin-right: 5px;
+						margin-right: 3.67rpx;
 					}
 				}
 			}
 
 			// logo
 			.logo_wrapper {
-				height: 100px;
+				height: 73.52rpx;
 				position: absolute;
 				top: 50%;
 				left: 50%;
@@ -88,27 +92,27 @@ page {
 
 				.text {
 					.en {
-						font-size: 30px;
+						font-size: 22.05rpx;
 						color: #27008F;
 						font-weight: 700;
 					}
 
 					.zn {
-						font-size: 17px;
+						font-size: 12.49rpx;
 						color: #27008F;
 						font-weight: 500;
 					}
 				}
 
 				.logoImage {
-					width: 90px;
-					height: 90px;
+					width: 66.17rpx;
+					height: 66.17rpx;
 					overflow: hidden;
 					border-radius: 50%;
-					margin-left: 10px;
+					margin-left: 7.35rpx;
 					background: linear-gradient(145deg, #f5ffff, #ced7e5);
-					box-shadow: 11px 11px 22px #9ca3ad,
-						-11px -11px 22px #ffffff;
+					box-shadow: 8.08rpx 8.08rpx 16.17rpx #9ca3ad,
+						-8.08rpx -8.08rpx 16.17rpx #ffffff;
 
 					image {
 						width: 100%;
@@ -120,9 +124,9 @@ page {
 
 		// 数据部分
 		.main {
-			font-size: 12px;
+			font-size: 8.82rpx;
 			box-sizing: border-box;
-			padding: 6px;
+			padding: 4.41rpx;
 			width: 100%;
 			// height: 1000px;
 
@@ -132,15 +136,15 @@ page {
 
 				.left_msg {
 					width: 34vw;
-					height: 230px;
+					height: 169.11rpx;
 					// background-color: red;
 					display: flex;
 					justify-content: space-between;
 
 					.judge {
-						border-radius: 5px;
+						border-radius: 3.67rpx;
 						width: 23%;
-						height: 230px;
+						height: 169.11rpx;
 						background: #fff;
 						display: flex;
 						flex-direction: column;
@@ -164,16 +168,16 @@ page {
 							width: 32%;
 							height: 49%;
 							// border: 1px solid #000;
-							border-radius: 5px;
+							border-radius: 3.67rpx;
 							background: #fff;
 							display: flex;
 							justify-content: space-around;
 							flex-direction: column;
-							padding: 0 5px;
+							padding: 0 3.67rpx;
 							box-sizing: border-box;
 
 							.num {
-								font-size: 30px;
+								font-size: 22.05rpx;
 							}
 						}
 					}
@@ -181,7 +185,7 @@ page {
 
 				.detail_msg {
 					width: 64vw;
-					height: 230px;
+					height: 169.11rpx;
 					// background-color: red;
 					display: flex;
 					flex-direction: column;
@@ -196,14 +200,14 @@ page {
 							width: 16%;
 							// height: 115px;
 							background: #fff;
-							border-radius: 5px;
+							border-radius: 3.67rpx;
 							display: flex;
 							justify-content: center;
 							align-items: center;
-							font-size: 14px;
+							font-size: 10.29rpx;
 
 							&.press {
-								height: 115px;
+								height: 84.55rpx;
 							}
 						}
 
@@ -230,25 +234,25 @@ page {
 							.list_item {
 								width: 19%;
 								// flex: 0.9;
-								height: 55px;
+								height: 40.44rpx;
 								background: #fff;
 								display: flex;
-								border-radius: 5px;
+								border-radius: 3.67rpx;
 
 								.item_title {
 									flex: 1;
-									font-size: 12px;
-									padding: 5px 10px;
+									font-size: 8.82rpx;
+									padding: 3.67rpx 7.35rpx;
 
 								}
 
 								.item_num {
 									flex: 2;
 									display: flex;
-									padding-right: 10px;
+									padding-right: 7.35rpx;
 									justify-content: flex-end;
 									align-items: flex-end;
-									font-size: 28px;
+									font-size: 20.58rpx;
 									font-weight: 600;
 								}
 
@@ -264,24 +268,24 @@ page {
 
 			// 数据可视化部分
 			.visualization {
-				margin-top: 15px;
+				position: relative;
+				margin-top: 11.02rpx;
 				width: 100%;
-				height: 400px;
+				height: 294.11rpx; 
 				background: #fff;
-				border-radius: 5px;
-				padding: 0 20px;
+				border-radius: 3.67rpx;
+				padding: 0 14.7rpx;
+				padding-top: 11.02rpx;
 				box-sizing: border-box;
 				display: flex;
 				flex-direction: column;
+				// align-items: center;
 				justify-content: space-around;
-
-				.qiun-charts {
-					canvas{
-						width: 100%;
-						height: 120px;
-					}
-					// width: 100%;
-				}
+				overflow: hidden;
+				// box-sizing: border-box;
+				
+				
+				
 			}
 		}
 
