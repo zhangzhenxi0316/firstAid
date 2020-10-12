@@ -8,7 +8,11 @@ page{
 	border-radius:2.94rpx ;
 	display: flex;
 	flex-direction: column;
-	margin: 44.11rpx auto ;
+	// margin: 44.11rpx auto ;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-50%);
 	box-shadow: 0 0 8px rgba(0,0,0,.1);
 	padding: 0 51.47rpx;
 	box-sizing: border-box;
@@ -61,3 +65,18 @@ page{
 		}
 	}
 }
+.select{
+			margin-top: 7.35rpx;
+			background: #eee;
+			border: 1.47rpx solid #c7c7c7;
+			padding: 3.67rpx 7.35rpx;
+			display: flex;
+			justify-content: space-between;
+			.picker{
+				flex:9;
+				font-size:11.02rpx;
+			}
+			.icons{
+				flex:1;
+			}
+		}

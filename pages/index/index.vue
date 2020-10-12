@@ -625,6 +625,7 @@
 				this.isStart = !this.isStart
 
 				if (this.isStart) {
+					this.option1.series[0].data = []
 					this.echartsInit()
 				} else {
 					clearTimeout(this.timer3)

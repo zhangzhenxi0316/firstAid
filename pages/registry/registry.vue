@@ -13,7 +13,7 @@
 						<input type="text" :placeholder="this.index==0?'老师账号':'学生学号'" v-model="username">
 					</view>
 					<view class="item">
-						<input type="text" :placeholder="this.index==2?'用户名':'姓名'" v-model="username" @change="handlePasswordChange">
+						<input type="text" :placeholder="this.index==2?'用户名':'姓名'" v-model="name" @change="handlePasswordChange">
 					</view>
 					<view class="item">
 						<input type="password" placeholder="密码" v-model="password" @change="handlePasswordChange">
@@ -23,7 +23,7 @@
 						<view class="item">
 							<input type="password" placeholder="确认密码" v-model="currentPassword" @change="handlePasswordChange">
 						</view>
-						<uni-icons class="icon_password" :type="this.current?'checkbox':'close'" color="red" v-show="this.password.length>0&&this.currentPassword.length>0"></uni-icons>
+						<uni-icons class="icon_password" :type="this.current?'checkbox':'close'" :color="this.current?'green':'red'" v-show="this.password.length>0&&this.currentPassword.length>0"></uni-icons>
 					</view>
 					<view class="item" v-show="this.index!==2">
 						<input type="text" placeholder="性别" v-model="sex">
@@ -61,7 +61,7 @@
 	export default {
 		data() {
 			return {
-
+				name:'',
 				index: 0,
 				username: '',
 				password: '',
@@ -80,24 +80,112 @@
 				this.index = e.detail.value
 			},
 			handlePasswordChange() {
+				console.log(1)
 				this.current = this.password === this.currentPassword ? true : false
 				console.log(this.current)
 			},
 			handleSumbit() {
+				uni.showLoading({
+					title:'正在注册'
+				})
 				let url;
+				let data;
+				if(!this.current){
+					uni.showToast({
+						icon:'none',
+						title:'两次密码不一样'
+					})
+					return
+				}
+				if(this.username===''&&this.password===''&&this.department===''){
+					uni.showToast({
+						icon:'none',
+						title:'请填写所有注册资料'
+					})
+					return 
+				}
 				switch (this.index) {
 					case 0:
+					// 老师
+					if(this.sex==''&&this.age==''&&this.name==''&&this.courseId==''){
+						uni.showToast({
+							icon:'none',
+							title:'请填写所有注册资料'
+						})
+						return 
+					}
+					url = '/teacher/register'
+					data = {
+						teaName:this.name,
+						teaAge:this.age,
+						teaAccount:this.username,
+						teaPassword:this.password,
+						teaSex:this.sex,
+						teaCourse:this.courseId,
+						teaDepart:this.department
+					}
+					
 						break;
 					case 1:
+					// 学生
+					if(this.sex==''&&this.name===''&&this.teaClass==''){
+						uni.showToast({
+							icon:'none',
+							title:'请填写所有注册资料'
+						})
+						return 
+					}
+					url = '/student/register'
+					data = {
+						stuOn:this.username,
+						stuName:this.name,
+						stuAge:this.age,	
+						stuPassword:this.password,
+						stuSex:this.sex,
+						stuClass:this.teaClass,
+						stuDepartment:this.department
+					}
 						break;
 					case 2:
+					if(this.Phone==''){
+						uni.showToast({
+							icon:'none',
+							title:'请填写所有注册资料'
+						})
+						return
+					}
+					url='/user/registry';
+					data={
+						userName:this.username,
+						password:this.password,
+						Phone:this.phone,
+						Depart:this.department
+					}
+					
 						break;
 					default:
 						break;
 				}
 				uni.request({
 					method: 'POST',
-					url: ''
+					url,data
+					
+				}).then(res=>{
+					uni.hideLoading()
+					uni.showToast({
+						icon:'success',
+						title:'注册成功'
+					})
+					setTimeout(()=>{
+						uni.navigateTo({
+							url:'/pages/login/login'
+						})
+					},1000)
+				}).catch(err=>{
+					uni.showToast({
+						title:'注册失败',
+						icon:'none'
+					})
 				})
 			}
 		}
