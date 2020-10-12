@@ -9,8 +9,11 @@
 			</view>
 			<view class="login_input">
 				<view class="borderBottom">
-					<view class="item" v-show="this.index!==2">
-						<input type="text" :placeholder="this.index==0?'老师账号':'学生学号'" v-model="username">
+					<view class="item" v-show="this.index==0">
+						<input type="text" placeholder="老师账号" v-model="username">
+					</view>
+					<view class="item" v-show="this.index==1">
+						<input type="number" placeholder="学生学号" v-model="username">
 					</view>
 					<view class="item">
 						<input type="text" :placeholder="this.index==2?'用户名':'姓名'" v-model="name" @change="handlePasswordChange">
@@ -97,7 +100,7 @@
 					})
 					return
 				}
-				if(this.username===''&&this.password===''&&this.department===''){
+				if(this.username===''||this.password===''||this.department===''){
 					uni.showToast({
 						icon:'none',
 						title:'请填写所有注册资料'
@@ -107,7 +110,7 @@
 				switch (this.index) {
 					case 0:
 					// 老师
-					if(this.sex==''&&this.age==''&&this.name==''&&this.courseId==''){
+					if(this.sex==''&&this.age==''||this.name==''||this.courseId==''){
 						uni.showToast({
 							icon:'none',
 							title:'请填写所有注册资料'
@@ -121,14 +124,14 @@
 						teaAccount:this.username,
 						teaPassword:this.password,
 						teaSex:this.sex,
-						teaCourse:this.courseId,
+						teaCourse:parseInt(this.courseId),
 						teaDepart:this.department
 					}
 					
 						break;
 					case 1:
 					// 学生
-					if(this.sex==''&&this.name===''&&this.teaClass==''){
+					if(this.sex==''&&this.name===''||this.teaClass==''){
 						uni.showToast({
 							icon:'none',
 							title:'请填写所有注册资料'
@@ -137,7 +140,7 @@
 					}
 					url = '/student/register'
 					data = {
-						stuOn:this.username,
+						stuOn:parseInt(this.username),
 						stuName:this.name,
 						stuAge:this.age,	
 						stuPassword:this.password,
@@ -166,6 +169,7 @@
 					default:
 						break;
 				}
+				// data.status = this.state.index
 				uni.request({
 					method: 'POST',
 					url,data

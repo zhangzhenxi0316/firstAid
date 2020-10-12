@@ -49,7 +49,7 @@
 							<inputComponent  :defaultV="String(setting.press.pressPercent)"  @hanleInputChange="handlePercentChange"  type="press"  class="item" title="按压达标率 " unit="%" :arr="numArr"></inputComponent>
 							
 							<inputComponent  :defaultV="String(setting.press.first)"  @hanleInputChange="handleTimeStartChange" type="press"  class="item" title="首次按压中断时间上限 " width="140" :arr="numArr"></inputComponent>
-							<inputComponent  :defaultV="String(setting.press.other)" @hanleInputChange="handleTimeOtherChange"  type="press"  class="item" title="其他按压中断时间上限 " width="140" :arr="numArr"></inputComponent>
+							<!-- <inputComponent  :defaultV="String(setting.press.other)" @hanleInputChange="handleTimeOtherChange"  type="press"  class="item" title="其他按压中断时间上限 " width="140" :arr="numArr"></inputComponent> -->
 						</view>
 						
 					</view>
@@ -97,7 +97,7 @@
 				<navigator url="/pages/index/index">
 					<view class="item2">取消</view>
 				</navigator>
-				<view class="item2">确定</view>
+				<view class="item2" @click="handleSumit">确定</view>
 			</view>
 		</view>
 	</view>
@@ -124,27 +124,27 @@
 				
 				setting:{
 					usual:{
-						maxTime:0,
-						TotalLoop:0,
+						maxTime:150,
+						TotalLoop:5,
 						// 单选第一个为true
 						isCorrent:1,
 					},
 					press:{
 						pressStart:0,
 						pressEnd:0,
-						pressPercent:0,
-						first:0,
-						other:0
+						pressPercent:70,
+						first:0,//最大按压中断时间
+						
 					},
 					cui:{
 						start:0,
 						end:0,
-						percent:0
+						percent:70
 					},
 						
 					aed:{
 						isOpen:true,
-						Loop:0,
+						Loop:2,
 						isPrint:true
 					}
 					
@@ -157,6 +157,47 @@
 			// this.numArr = arr
 		},
 		methods: {
+			handleSumit(){
+				uni.showLoading({
+					title:"正在上传设置"
+				})
+				let data = {
+					maxUseTime:this.setting.usual.maxTime,
+					totalCycle:this.setting.usual.TotalLoop,
+					modelResurrection:this.setting.usual.isCorrent,
+					pressDepthMin:this.setting.press.pressStart,
+					pressDepthMax:this.setting.press.pressEnd,
+					pressSuccessRate:this.setting.press.pressPercent,
+					pressMaxPauseTime:this.setting.press.first,
+					blowAirMin:this.setting.cui.start,
+					blowAirMax:this.setting.cui.end,
+					blowSuccessRate:this.setting.cui.percent,
+					aedUse:this.setting.aed.Loop,
+					doorAlwaysOpen:this.setting.aed.isOpen?1:0,
+					testCompletedInstantPrint:this.setting.aed.Print?1:0
+				}
+				console.log(data)
+				uni.request({
+					url:'http://set/insertOrUpdate',
+					data:data,
+					method:"POST",
+					success: () => {
+						uni.hideLoading()
+							uni.showToast({
+								icon:'none',
+								title:'数据上传成功'
+							})
+					},
+					fail: () => {
+						uni.hideLoading()
+						uni.showToast({
+							icon:'none',
+							title:'数据上传失败'
+						})
+					}
+				})
+				
+			},
 			handleMaxChange(e){
 				this.setting.usual.maxTime = e.value
 			},
@@ -170,9 +211,9 @@
 			handleTimeStartChange(e){
 				this.settting.press.first = e.value
 			},
-			handleTimeOtherChange(e){
-				this.settting.press.other = e.value
-			},
+			// handleTimeOtherChange(e){
+			// 	this.settting.press.other = e.value
+			// },
 			handlePercentChange(e){
 				this.setting.cui.percent = e.value
 			},

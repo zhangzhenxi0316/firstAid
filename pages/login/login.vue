@@ -53,6 +53,7 @@
 				this.index = e.detail.value
 			},
 			handleSubmit(){
+				console.log(this.state)
 				if(this.username==='',this.password===''){
 					uni.showToast({
 						icon:'none',
@@ -77,7 +78,7 @@
 					break;
 					case 1:
 					data={
-						stuOn:this.username,
+						stuOn:parseInt(this.username),
 						stuPassword:this.password
 					}
 					url='/student/login'
