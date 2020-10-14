@@ -15,6 +15,7 @@
 			<!-- 头部控制条开始 -->
 			<view class="header_control">
 				<view class="mode_control">
+					<!-- 训练控制 -->
 					<view class="mode_item" v-for="item in modeList" :key="item.id" @click="hanleTagger(item.id)">
 						<uni-icons :type="item.isCurrent?'circle-filled':'circle'"></uni-icons>
 						<text>{{item.name}}</text>
@@ -121,7 +122,21 @@
 			<!-- 数据部分结束 -->
 
 		</view>
-
+		<!-- 考试信息弹框 -->
+		<wyb-popup class="popup-wrapper" ref="popup" type="center" height="180" width="250" radius="6" :showCloseIcon="true">
+		    <view class="popup-content">
+		        <view class="popup-title">
+					请填写完整资料
+				</view>
+				<view class="popup-input">
+					<input type="text"  placeholder="请输入老师账号" v-model="teacherAccount"/>
+					<input type="text"  placeholder="请输入课程id" v-model="courseId" />
+				</view>
+				<view class="popup-input">
+					<button class="pupup-btn" @click="handleSubmit"> 确定</button>
+				</view>
+		    </view>
+		</wyb-popup>
 
 	</view>
 </template>
@@ -140,6 +155,8 @@
 	export default {
 		data() {
 			return {
+				teacherAccount:'',
+				courseId:'',
 				//蓝牙搜索设备列表
 				bluetoothLinks: [],
 
@@ -389,6 +406,9 @@
 
 		},
 		methods: {
+			handleSubmit(){
+				// 老师的账号和课程id的记录
+			},
 			echartsInit() {
 				// 定时器
 				this.timer3 = setTimeout(() => {
@@ -638,6 +658,11 @@
 					item.id === id ? item.isCurrent = true : item.isCurrent = false;
 					return item
 				})
+				// 考试的时候输入老师账号和课程id
+				console.log(id)
+				if(id==2){
+					this.$refs.popup.show()
+				}
 			}
 		}
 	}
