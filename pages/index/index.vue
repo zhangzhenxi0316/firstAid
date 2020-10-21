@@ -145,6 +145,7 @@
 	import echarts from '@/components/echarts/echarts.vue'
 	let data = []
 	let xDate = []
+	// let dataArray = []
 
 	let startNum = 9
 	for (var i = 0; i < 200; i++) {
@@ -155,6 +156,7 @@
 	export default {
 		data() {
 			return {
+				dataArray:[],
 				teacherAccount:'',
 				courseId:'',
 				//蓝牙搜索设备列表
@@ -413,22 +415,23 @@
 				// 定时器
 				this.timer3 = setTimeout(() => {
 					this.timer1 = setInterval(() => {
-
+					
 						this.option1.xAxis[1].data = this.option1.xAxis[1].data.map(item => {
 							item += 2
 							return item
 						})
-
+						// this.optio.n1.xAxis[1].data.push(1)
 					}, 2000)
 				}, 8000)
 				this.timer2 = setInterval(() => {
 					let randomNum = this.random(5, 150)
 					if (this.option1.series[0].data.length > 200) {
 						this.option1.series[0].data.shift()
+						// console.log(this.option1.sseries[0].data)
 					}
 					// console.log(this.option1.series[0].data)
 					this.option1.series[0].data.push(randomNum)
-
+					this.dataArray.push(randomNum)
 
 				}, 50)
 			},
@@ -504,7 +507,7 @@
 										},1500)
 									}else{
 										uni.showToast({
-											title:'蓝牙连接',
+											title:'蓝牙连接失败',
 											icon:"none"
 										})
 									}
@@ -648,9 +651,12 @@
 					this.option1.series[0].data = []
 					this.echartsInit()
 				} else {
+					// 结束
 					clearTimeout(this.timer3)
 					clearInterval(this.timer1)
 					clearInterval(this.timer2)
+					let str = this.dataArray.join()
+					console.log(str)
 				}
 			},
 			hanleTagger(id) {
