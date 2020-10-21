@@ -385,10 +385,65 @@
 				cWidth: '',
 				cHeight: '',
 				pixelRatio: 1,
+				// 经
+								traLongitude:'',
+								// 纬
+								traLatitude:'',
+								startTime:'',
+								endTime:''
 			}
 		},
 		onLoad() {
-
+// uni.showLoading({
+// 				title:'获取位置信息',
+// 			})
+			uni.getLocation({
+			    type: 'wgs84',
+			    success: function (res) {
+			        console.log('当前位置的经度：' + res.longitude);
+			        console.log('当前位置的纬度：' + res.latitude);
+			    }
+			});
+			// uni.getLocation({
+			// 	success: (res) => {
+			// 		uni.hideLoading()
+			// 		uni.showToast({
+			// 			title:'位置获取成功',
+			// 			icon:'none'
+			// 		})
+			// 		console.log(res)
+			// 		this.traLongitude = res.longitude
+			// 		this.traLatitude = res.latitude
+			// 	},
+			// 	fail: (err) => {
+			// 		uni.hideLoading()
+			// 		uni.showToast({
+			// 			title:'位置获取失败',
+			// 			icon:'none'
+			// 		})
+			// 	},
+			// 	complete: () => {
+			// 		console.log('9')
+			// 		// uni.hideLoading()
+			// 	}
+			// })
+		
+		},
+		onShow() {
+			uni.openBluetoothAdapter({
+							success:()=> {
+								console.log("蓝牙模板初始化成功")
+								this.startBluetoothDeviceDiscovery()
+								this.bluetoothLinks = []
+							},
+							fail:() => {
+								//如果用户未开启蓝牙权限，弹窗提示
+								uni.showToast({
+									title: '请先打开蓝牙',
+									icon:"none"
+								});
+							}
+						})
 		},
 		onShow() {
 			uni.openBluetoothAdapter({
@@ -649,12 +704,16 @@
 
 				if (this.isStart) {
 					this.option1.series[0].data = []
+										this.startTime = Date.now()
+
 					this.echartsInit()
 				} else {
 					// 结束
 					clearTimeout(this.timer3)
 					clearInterval(this.timer1)
 					clearInterval(this.timer2)
+					this.endTime = Date.now()
+
 					let str = this.dataArray.join()
 					console.log(str)
 				}
@@ -669,7 +728,17 @@
 				if(id==2){
 					this.$refs.popup.show()
 				}
-			}
+			},
+			//上传训练数据
+						submitTrain(){
+							uni.request({
+								url:'/record/insert',
+								method:'POST',
+								data:{
+									
+								}
+							})
+		}
 		}
 	}
 </script>
