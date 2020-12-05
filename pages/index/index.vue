@@ -146,36 +146,26 @@
 	let data = []
 	let xDate = []
 	// let dataArray = []
-
+	let deviceDiscover = false;
+	let devicename = 'BLE SPP'
+	let msg = ''
 	let startNum = 9
-	for (var i = 0; i < 200; i++) {
+	for (var i = 0; i < 500; i++) {
 		xDate[i] = i * 50 / 1000
 	}
 
-
+ 
 	export default {
 		data() {
 			return {
+				serviceId: '',
+				deviceId: '',
+				notycharacteristicsId: '',
+				characteristicsId: '',
 				dataArray:[],
 				teacherAccount:'',
 				courseId:'',
-				//蓝牙搜索设备列表
-				bluetoothLinks: [],
-
-				//设备ID
-				deviceID: '',
-
-				//设备服务ID列表
-				serviceList: [],
-
-				//FFE0服务seviceID
-				serviceId: '',
-
-				//FFE0服务特征值characteristics
-				characteristics: [],
-
-				//写服务特征值
-				characteristicId: "",
+				
 				timer1: '',
 				time2: '',
 				option1: {
@@ -446,20 +436,7 @@
 						})
 		},
 		onShow() {
-			uni.openBluetoothAdapter({
-							success:()=> {
-								console.log("蓝牙模板初始化成功")
-								this.startBluetoothDeviceDiscovery()
-								this.bluetoothLinks = []
-							},
-							fail:() => {
-								//如果用户未开启蓝牙权限，弹窗提示
-								uni.showToast({
-									title: '请先打开蓝牙',
-									icon:"none"
-								});
-							}
-						})
+			this.openBluetoothAdapter()
 
 		},
 		methods: {
@@ -478,224 +455,303 @@
 						// this.optio.n1.xAxis[1].data.push(1)
 					}, 2000)
 				}, 8000)
-				this.timer2 = setInterval(() => {
-					let randomNum = this.random(5, 150)
-					if (this.option1.series[0].data.length > 200) {
-						this.option1.series[0].data.shift()
-						// console.log(this.option1.sseries[0].data)
-					}
-					// console.log(this.option1.series[0].data)
-					this.option1.series[0].data.push(randomNum)
-					this.dataArray.push(randomNum)
-
-				}, 50)
+				
 			},
 			random(min, max) {
 				return Math.floor(Math.random() * (max - min)) + min
 			},
-			startBluetoothDeviceDiscovery(){
-							//开始搜寻附近的蓝牙外围设备
-							uni.startBluetoothDevicesDiscovery({
-								success: res => {
-									console.log(res)
-									this.onBluetoothDeviceFound();
-								},
-								fail: res => {
-									uni.showToast({
-										icon: "none",
-										title: "查找设备失败！",
-										duration: 3000
-									})
+			// 初始化蓝牙适配器
+			openBluetoothAdapter() {
+				uni.openBluetoothAdapter({
+					success: (res) => {
+						// 蓝牙适配器初始化成功
+						console.log('openBluetoothAdapter success', res);
+						this.startBluetoothDevicesDiscovery()
+					},
+					fail: (err) => {
+						// 蓝牙适配器初始化失败
+						uni.showToast({
+							title: '请打开蓝牙',
+							duration: 1000,
+							icon:'none'
+						})
+						if (err.errCode === 10001) {
+							// 监听蓝牙适配器状态改变
+							uni.onBluetoothAdapterStateChange((res)=> {
+								console.log('BluetoothAdapterStateChange', +res);
+								if (res.available) {
+									this.startBluetoothDevicesDiscovery()
 								}
-							});
-						},
-						
-						//监听外围设备
-						onBluetoothDeviceFound(){
-							uni.onBluetoothDeviceFound((devices)=>{
-								if(devices.devices[0].name){
-									//将有name的蓝牙设备保存到devices中
-									let device = {
-										name:devices.devices[0].name,
-										deviceID:devices.devices[0].deviceId
-									}
-									this.bluetoothLinks.push(device)
-									
-									//检测是否查找到需要连接的设备,name = "目标蓝牙名称"
-									let hasBluetooth = this.bluetoothLinks.some((item)=>item.name = "zzx")
-									if(hasBluetooth){
-										//筛选出需要连接的设备信息
-										let deviceInfo = this.bluetoothLinks.filter((item)=>{
-											//name = "目标蓝牙名称"
-											return item.name="zzx"
-										})
-										this.stopBluetoothDevicesDiscovery()
-										this.createBLEConnection(deviceInfo[0].deviceID)
-									}
-								}
+			
 							})
-						},
-						
-						//停止蓝牙搜索
-						stopBluetoothDevicesDiscovery(){
-							uni.stopBluetoothDevicesDiscovery({
-							  success:(res)=>{
-								console.log("蓝牙停止搜索")
-								console.log(this.bluetoothLinks)
-							  }
+						}
+					}
+				})
+			},
+			// 开始搜寻蓝牙外围设备
+			startBluetoothDevicesDiscovery() {
+			
+				if (deviceDiscover) {
+					return
+				}
+				deviceDiscover = true
+				uni.startBluetoothDevicesDiscovery({
+					allowDuplicatesKey: false,
+					success: (res) => {
+						console.log('startBluetoothDevicesDiscovery', res);
+						this.onBluetoothDeviceFound();
+					}
+				})
+			},
+			// 监听到寻找到的新设备
+			onBluetoothDeviceFound() {
+				let that = this
+				uni.showLoading({
+					title: '正在搜索设备'
+				})
+				uni.onBluetoothDeviceFound(function(res) {
+					res.devices.forEach(device => {
+						if (!device.name && !device.localName) {
+							return
+						}
+						console.log('device',device);
+						//如果名字相同连接设备
+						if (device.name == devicename) {
+							that.createBLEConnection(device.deviceId);
+							that.deviceId = device.deviceId
+							uni.hideLoading()
+							// console.log('ddddd')
+							that.stopBluetoothDevicesDiscovery()
+							uni.showLoading({
+								title: '搜索到设备正在连接'
 							})
-						},
-						
-						//连接蓝牙
-						createBLEConnection(deviceID){
-							console.log(deviceID)
-							uni.createBLEConnection({
-								deviceId:deviceID,
-								success:(res)=>{
-									console.log("连接目标设备成功")
-									
-									//监听蓝牙连接状态，成功继续，失败提示
-									if(this.onBLEConnectionStateChange()){
-										//获取目标蓝牙所有特征值
-										setTimeout(()=>{
-											this.getBLEDeviceServices()
-										},1500)
-									}else{
-										uni.showToast({
-											title:'蓝牙连接失败',
-											icon:"none"
-										})
-									}
-								},
-								fail(err) {
-									console.log(err)
-								}
-							})
-						},
-						
-						//监听蓝牙适配器状态
-						onBluetoothAdapterStateChange(){
-							uni.onBluetoothAdapterStateChange((res)=>{
-								console.log(`蓝牙适配器状态: ${res.available},蓝牙适配器搜索状态: ${res.discovering}`)
-							})
-						},
-						//监听蓝牙连接状态
-						onBLEConnectionStateChange(){
-							uni.onBLEConnectionStateChange((res) => {
-								console.log(`设备 ${res.deviceId} 状态改变, 连接状况: ${res.connected}`)
-								return res.connected
-							})
-						},
-						//获取目标蓝牙所有特征值
-						getBLEDeviceServices(){
-							uni.getBLEDeviceServices({
-								deviceId:this.deviceID,
-								success: (res) => {
-									console.log('目标蓝牙服务:', res.services)
-									
-									//记录所有服务特征值
-									this.serviceList = res.services
-									
-									//遍历结果是否是FFE0服务
-									res.services.forEach((item)=>{
-										if(item.uuid.indexOf("FFE0")!=-1){
-											this.serviceId = item.uuid;
-											console.log('serverId:', this.serviceId)
-											this.getBLEDeviceCharacteristics()
+						}
+					})
+			
+				})
+			},
+			// 创建连接
+			createBLEConnection(deviceId) {
+				uni.createBLEConnection({
+					deviceId: deviceId,
+					success: (res) => {
+						uni.showToast({
+							title: '连接成功'
+						})
+						console.log('createBLEConnection', res);
+						setTimeout(()=>{
+							this.getBLEDeviceServices(deviceId);
+						},1000)
+					},
+					fail: (err) => {
+						console.log('创建连接失败')
+					}
+				})
+				
+			},
+			// 停止蓝牙搜索
+			stopBluetoothDevicesDiscovery() {
+				uni.stopBluetoothDevicesDiscovery({
+					success: (res) => {
+						console.log('停止蓝牙设备搜索')
+					}
+				})
+			},
+			// 获取蓝牙所有服务
+			getBLEDeviceServices(deviceId) {
+				// console.log(111,deviceId)
+				let that = this;
+				uni.getBLEDeviceServices({  
+					deviceId: deviceId,
+					success: (service) => {
+						let all_UUID = service.services; //取出所有的服务
+						// console.log(service)
+						console.log('所有的服务', all_UUID);
+						let UUID_lenght = all_UUID.length; //获取到服务数组的长度
+						/* 遍历服务数组 */
+						for (let index = 0; index < UUID_lenght; index++) {
+							let ergodic_UUID = all_UUID[index].uuid; //取出服务里面的UUID
+							let UUID_slice = ergodic_UUID.slice(4, 8); //截取4到8位
+							// console.log(11111,UUID_slice)
+							/* 判断是否是我们需要的FEE0 */
+							if (UUID_slice == 'FEE0' || UUID_slice == 'fee0') {
+								let index_uuid = index;
+								that.serviceId = all_UUID[index_uuid].uuid //确定需要的服务UUID
+								
+							};
+						};
+						console.log('需要的服务UUID', that.serviceId)
+						that.getBLEDeviceCharacteristics(); //调用获取特征值函数
+					},
+					fail:(err)=>{ 
+						console.log('获取服务失败',err)
+					}
+			
+				})
+			},
+			// 获取所有服务的特征值
+			getBLEDeviceCharacteristics() {
+				let that = this;
+				let device_characteristics = [];
+				let characteristics_uuid = {};
+				// console.log('deviceId' + this.deviceId)
+				// console.log('serviceId' + this.serviceId)
+				uni.getBLEDeviceCharacteristics({
+					deviceId: this.deviceId,
+					serviceId: this.serviceId,
+					success: (res) => {
+						let characteristics = res.characteristics; //获取到所有特征值
+						let characteristics_length = characteristics.length; //获取到特征值数组的长度
+						console.log('获取到特征值', characteristics);
+						console.log('获取到特征值数组长度', characteristics_length);
+						/* 遍历数组获取notycharacteristicsId */
+						for (let index = 0; index < characteristics_length; index++) {
+							let noty_characteristics_UUID = characteristics[index].uuid; //取出特征值里面的UUID
+							let characteristics_slice = noty_characteristics_UUID.slice(4, 8); //截取4到8位
+							// console.log('id'+characteristics_slice)
+							/* 判断是否是我们需要的FEE1 */
+							if (characteristics_slice == 'FEE1' || characteristics_slice == 'fee1') {
+								let index_uuid = index;
+								that.notycharacteristicsId = characteristics[index_uuid].uuid //需确定要的使能UUID
+								that.characteristicsId= characteristics[index_uuid].uuid //暂时确定的写入UUID
+									// console.log('id1'+characteristicsId)
+								/* 遍历获取characteristicsId */
+								for (let index = 0; index < characteristics_length; index++) {
+									let characteristics_UUID = characteristics[index].uuid; //取出特征值里面的UUID
+									let characteristics_slice = characteristics_UUID.slice(4, 8); //截取4到8位
+									/* 判断是否是我们需要的FEE2 */
+									if (characteristics_slice == 'FEE2' || characteristics_slice == 'fee2') {
+										let index_uuid = index;
+										that.characteristicsId = characteristics[index_uuid].uuid //确定的写入UUID
+			
+									};
+								};
+							};
+						};
+						console.log('使能characteristicsId', that.notycharacteristicsId);
+						console.log('写入characteristicsId', that.characteristicsId);
+						that.notycharacteristics(); //使能事件
+			
+					},
+					fail: (err) => {
+						console.log('getBLEDeviceCharacteristics', err)
+					}
+			
+				})
+			},
+			/* 使能函数 */
+			notycharacteristics() {
+				let that = this;
+				let recv_value_ascii = "";
+				let string_value = "";
+				let recve_value = "";
+				uni.notifyBLECharacteristicValueChange({
+					deviceId: that.deviceId,
+					serviceId: that.serviceId,
+					characteristicId: that.notycharacteristicsId,
+					state: true,
+					success: (res)=> {
+						console.log('使能成功', res);
+						/* 设备返回值 */
+						uni.onBLECharacteristicValueChange((res) =>{
+							
+							let result = res.value;
+							let hex = that.buf2hex(result);
+							hex = hex+msg
+							// console.log('返回的值', hex);
+							let resObj = that.parse(hex)
+							msg =resObj.slice
+							// console.log(resObj)
+							resObj.strArr.map((item,index)=>{
+								let category = item.slice(6,8)
+								switch(category){
+								    case "02":
+								    if(this.isStart){
+										let obj =  that.parse02(item)
+										// that.list.press.deep = obj.pressDeep;
+										// that.list.cui.deep = obj.cui
+										// that.option1.series.data.push(obj.pressDeep)
+										if (that.option1.series[0].data.length > 500) {
+											that.option1.series[0].data.shift()
+											// console.log(this.option1.sseries[0].data)
 										}
-									})
-								},
-								fail: (err) => {
-									console.log("获取目标蓝牙服务失败:" + err)
+										// console.log(this.option1.series[0].data)
+										that.option1.series[0].data.push(obj.pressDeep)
+										// that.dataArray.push(obj.pressDeep) 
+										
+										console.log(obj.pressDeep,obj.cui) 
+									}  
 								}
 							})
-						},
-						
-						//获取特定服务特征值
-						getBLEDeviceCharacteristics(){
-							uni.getBLEDeviceCharacteristics({
-								deviceId:this.deviceID,
-								serviceId:this.serviceId,
-								success: (res) => {
-									console.log("获取的" + this.serviceId + "服务的特征值：" + JSON.stringify(res.characteristics));
-									
-									this.characteristics = res.characteristics
-									
-									//遍历寻找"write"特征值FFF1
-									res.characteristics.forEach((item)=>{
-										if(item.uuid.indexOf("FFE1")!=-1){
-											this.characteristicId = item.uuid;
-											console.log('characteristicId:', this.characteristicId)
-											
-											//订阅该特征值
-											this.notifyBLECharacteristicValueChange()
-										}
-									})
-								},
-								fail: (err) => {
-									console.log("获取服务特征值失败" + err)
-								}
-							})
-						},
-						
-						//启用低功耗蓝牙设备特征值变化时的 notify 功能
-						notifyBLECharacteristicValueChange(){
-							uni.notifyBLECharacteristicValueChange({
-								deviceId:this.deviceID,
-								serviceId:this.serviceId,
-								characteristicId:this.characteristicId,
-								success: (res) => {
-									console.log('notifyBLECharacteristicValueChange success', res.errMsg)
-									this.onBLECharacteristicValueChange()
-								},
-								fail: (err) => {
-									console.log('notifyBLECharacteristicValueChange fail', res.errMsg)
-								}
-							})
-						},
-						
-						//监听低功耗蓝牙设备的特征值变化
-						onBLECharacteristicValueChange(){
-							uni.onBLECharacteristicValueChange((res)=>{
-								  console.log(`characteristic ${res.characteristicId} has changed, now is ${res.value}`)
-								  console.log(this.ab2hex(res.value))
-							})
-						},
-						
-						//ArrayBuffer16进制转换二进制
-						ab2hex(buffer){
-						  const hexArr = Array.prototype.map.call(
-						    new Uint8Array(buffer),
-						    function (bit) {
-						      return ('00' + bit.toString(16)).slice(-2)
-						    }
-						  )
-						  return hexArr.join('')
-						},
-						
-						//读取二进制数据
-						readBLECharacteristicValue(){
-							uni.readBLECharacteristicValue({
-								deviceId:this.deviceID,
-								serviceId:this.serviceId,
-								characteristicId:this.characteristicId,
-								success: (res) => {
-									
-								}
-							})
-						},
-						
-						//输出二进制数据
-						writeBLECharacteristicValue(){
-							uni.readBLECharacteristicValue({
-								deviceId:this.deviceID,
-								serviceId:this.serviceId,
-								characteristicId:this.characteristicId,
-								success: (res) => {
-									
-								}
-							})
-						},
+						});
+					},
+			
+					fail: function(res) {
+						console.log('使能失败', res);
+					}
+				})
+			},
+			
+			
+			/* ArrayBuffer类型数据转为16进制字符串 */
+			    buf2hex (buffer) { // buffer is an ArrayBuffer
+			        return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
+			    },
+			
+				    
+				
+				 parse02(str){
+				let i = 8;
+				let pressDeep = parseInt(str.slice(8,10),16)//按压距离
+				let cui = parseInt(parseInt(str.slice(10,12),16)<<8)+parseInt(str.slice(12,14),16)
+				let position = str.slice(14,16)
+				return {
+				    pressDeep,
+				    cui,
+				    position
+				}
+				},
+			 parse(str){
+			    let exp = /a55a/g
+			    let tap = true;
+			    let indexArr = []
+			    let strArr = []
+			    let obj = {}
+			    while(tap){
+			        let res = exp.exec(str);
+			        if(res){
+			            indexArr.push(res.index)
+			        }else{
+			            tap = false;
+			        }
+			    }
+			    
+			    for (let i = 0; i < indexArr.length; i++) {
+			        // 获取长度
+			        let length = parseInt(str.slice(indexArr[i]+4,indexArr[i]+6),16)*2 +6
+			        // indexArr[i]+4==str.length?length=0:length=length
+			        // console.log(indexArr[i]+length)
+			        if(indexArr[i]+length-1<str.length){
+			            let strRes = str.slice(indexArr[i],indexArr[i]+length)
+			            strArr.push(strRes)
+			            if(i==indexArr.length-1){
+			                strRes = str.slice(indexArr[i]+length)
+			                obj.slice = strRes
+			                // console.log(strRes)
+			            }
+			        }else{
+			            let strRes = str.slice(indexArr[i])
+			            obj.slice = strRes
+			            // console.log(indexArr[i]+length)
+			        }
+			        
+			    }
+			    if(indexArr.pop())
+			    return {
+			        strArr,
+			        ...obj
+			    }
+			},
 
 
 			handleStartChange() {
@@ -704,14 +760,13 @@
 
 				if (this.isStart) {
 					this.option1.series[0].data = []
-										this.startTime = Date.now()
-
+					this.startTime = Date.now()
 					this.echartsInit()
 				} else {
 					// 结束
 					clearTimeout(this.timer3)
 					clearInterval(this.timer1)
-					clearInterval(this.timer2)
+					// clearInterval(this.timer2)
 					this.endTime = Date.now()
 
 					let str = this.dataArray.join()
