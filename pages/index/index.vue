@@ -4,7 +4,7 @@
 		<view class="header">
 			<!-- 头部顶部开始 -->
 			<view class="space"></view>
-			<view class="header_banner"> 
+			<view class="header_banner">
 				<view class="userinfo">
 					<view class="userinfo_item">编号2</view>
 					<view class="userinfo_item">zzx</view>
@@ -24,7 +24,7 @@
 						{{isStart?"停止":"开始"}}
 					</view>
 				</view>
- 
+
 				<view class="setting">
 					<navigator url="/pages/setting/setting">
 						<view class="setting_item">设置</view>
@@ -62,7 +62,7 @@
 				<view class="left_msg">
 					<view class="judge">
 						<view class="judge_item" v-for="item in operateList" :key="item.id">
-							<uni-icons :type="item.isCorrect?'checkbox':'close'" :color="item.isCorrect?'green':'red' "></uni-icons>
+							<uni-icons v-show="item.name==''?false:true"  :type="item.isCorrect?'checkbox':'close'" :color="item.isCorrect?'green':'red' "></uni-icons>
 							<text>{{item.name}}</text>
 						</view>
 
@@ -124,18 +124,18 @@
 		</view>
 		<!-- 考试信息弹框 -->
 		<wyb-popup class="popup-wrapper" ref="popup" type="center" height="180" width="250" radius="6" :showCloseIcon="true">
-		    <view class="popup-content">
-		        <view class="popup-title">
+			<view class="popup-content">
+				<view class="popup-title">
 					请填写完整资料
 				</view>
 				<view class="popup-input">
-					<input type="text"  placeholder="请输入老师账号" v-model="teacherAccount"/>
-					<input type="text"  placeholder="请输入课程id" v-model="courseId" />
+					<input type="text" placeholder="请输入老师账号" v-model="teacherAccount" />
+					<input type="text" placeholder="请输入课程id" v-model="courseId" />
 				</view>
 				<view class="popup-input">
 					<button class="pupup-btn" @click="handleSubmit"> 确定</button>
 				</view>
-		    </view>
+			</view>
 		</wyb-popup>
 
 	</view>
@@ -154,7 +154,7 @@
 		xDate[i] = i * 50 / 1000
 	}
 
- 
+
 	export default {
 		data() {
 			return {
@@ -162,10 +162,10 @@
 				deviceId: '',
 				notycharacteristicsId: '',
 				characteristicsId: '',
-				dataArray:[],
-				teacherAccount:'',
-				courseId:'',
-				
+				dataArray: [],
+				teacherAccount: '',
+				courseId: '',
+
 				timer1: '',
 				time2: '',
 				option1: {
@@ -243,17 +243,17 @@
 				operateDetail: {
 					AED: [{
 							id: 0,
-							title: '正确',
+							title: '',
 
 						},
 						{
 							id: 1,
-							title: '操作错误',
+							title: '',
 
 						},
 						{
 							id: 2,
-							title: '电极错误',
+							title: '',
 
 						}
 					],
@@ -274,39 +274,44 @@
 						},
 						{
 							id: 3,
-							title: '多按',
-							num: 6
-						},
-						{
-							id: 4,
 							title: '少按',
 							num: 6
 						},
 						{
+							id: 4,
+							title: '多按',
+							num: 6
+						},
+						{
 							id: 5,
-							title: '按压频率',
-							num: null
+							title: '回弹不充分',
+							num: 0
 						},
 						{
 							id: 6,
-							title: '位置错误',
-							num: 10
+							title: '按压频率',
+							num: null
 						},
+						// {
+						// 	id: 6,
+						// 	title: '位置错误',
+						// 	num: 10
+						// },
 						{
 							id: 7,
-							title: '错误频率',
+							title: '频率错误数量',
 							num: 6
 						},
-						{
-							id: 8,
-							title: '回弹错误',
-							num: 6
-						},
-						{
-							id: 9,
-							title: '中断过长',
-							num: 6
-						}
+						// {
+						// 	id: 8,
+						// 	title: '回弹错误',
+						// 	num: 6
+						// },
+						// {
+						// 	id: 9,
+						// 	title: '中断过长',
+						// 	num: 6
+						// }
 					],
 					blow: [{
 							id: 0,
@@ -325,12 +330,12 @@
 						},
 						{
 							id: 3,
-							title: '多按',
+							title: '少吹',
 							num: 6
 						},
 						{
 							id: 4,
-							title: '少按',
+							title: '多吹',
 							num: 6
 						}
 					],
@@ -339,17 +344,17 @@
 				operateList: [{
 						id: 0,
 						isCorrect: true,
-						name: '意识判断'
+						name: ''
 					},
 					{
 						id: 1,
 						isCorrect: false,
-						name: '动脉触摸'
+						name: ''
 					},
 					{
 						id: 2,
 						isCorrect: false,
-						name: '开放气道'
+						name: ''
 					}
 				],
 				modeList: [{
@@ -376,23 +381,23 @@
 				cHeight: '',
 				pixelRatio: 1,
 				// 经
-								traLongitude:'',
-								// 纬
-								traLatitude:'',
-								startTime:'',
-								endTime:''
+				traLongitude: '',
+				// 纬
+				traLatitude: '',
+				startTime: '',
+				endTime: ''
 			}
 		},
 		onLoad() {
-// uni.showLoading({
-// 				title:'获取位置信息',
-// 			})
+			// uni.showLoading({
+			// 				title:'获取位置信息',
+			// 			})
 			uni.getLocation({
-			    type: 'wgs84',
-			    success: function (res) {
-			        console.log('当前位置的经度：' + res.longitude);
-			        console.log('当前位置的纬度：' + res.latitude);
-			    }
+				type: 'wgs84',
+				success: function(res) {
+					console.log('当前位置的经度：' + res.longitude);
+					console.log('当前位置的纬度：' + res.latitude);
+				}
 			});
 			// uni.getLocation({
 			// 	success: (res) => {
@@ -417,37 +422,151 @@
 			// 		// uni.hideLoading()
 			// 	}
 			// })
-		
+
 		},
 		onShow() {
 			uni.openBluetoothAdapter({
-							success:()=> {
-								console.log("蓝牙模板初始化成功")
-								this.startBluetoothDeviceDiscovery()
-								this.bluetoothLinks = []
-							},
-							fail:() => {
-								//如果用户未开启蓝牙权限，弹窗提示
-								uni.showToast({
-									title: '请先打开蓝牙',
-									icon:"none"
-								});
-							}
-						})
+				success: () => {
+					console.log("蓝牙模板初始化成功")
+					this.startBluetoothDeviceDiscovery()
+					this.bluetoothLinks = []
+				},
+				fail: () => {
+					//如果用户未开启蓝牙权限，弹窗提示
+					uni.showToast({
+						title: '请先打开蓝牙',
+						icon: "none"
+					});
+				}
+			})
 		},
 		onShow() {
 			this.openBluetoothAdapter()
 
 		},
 		methods: {
-			handleSubmit(){
+			switchFun(category, item) {
+				switch (category) {
+					// 0x02 20ms数据用来看按压数据
+					case "02":
+						if (this.isStart) {
+							let obj = this.parse02(item)
+							// that.list.press.deep = obj.pressDeep;
+							// that.list.cui.deep = obj.cui
+							// that.option1.series.data.push(obj.pressDeep)
+							if (that.option1.series[0].data.length > 500) {
+								that.option1.series[0].data.shift()
+								// console.log(this.option1.sseries[0].data)
+							}
+							// console.log(this.option1.series[0].data)
+							that.option1.series[0].data.push(obj.pressDeep)
+							// that.dataArray.push(obj.pressDeep) 
+							console.log(obj.pressDeep, obj.cui)
+						}
+						break;
+					case "01":
+						//模型设备编码
+						// console.log(item)
+						let code = item.slice(8, 14)
+						console.log(code)
+						break;
+					case "07":
+						//门的状态
+						let mode = parseInt(item.slice(8, 10), 16)
+						break;
+					case "0b":
+						console.log('闻讯cpr设置');
+						break;
+					case "0a":
+						console.log('接收设置完成');
+						break;
+					case "03":
+						this.operateDetail.press[0].num = parseInt(item.slice(8, 10), 16)
+						this.operateDetail.press[1].num = parseInt(item.slice(10, 12), 16)
+						this.operateDetail.press[2].num = parseInt(item.slice(12, 14), 16)
+						this.operateDetail.press[3].num = parseInt(item.slice(14, 16), 16)
+						this.operateDetail.press[4].num = parseInt(item.slice(16, 18), 16)
+						this.operateDetail.press[5].num = parseInt(item.slice(18, 20), 16)
+						break;
+					case "04":
+						// blow
+						this.operateDetail.blow[0].num = parseInt(item.slice(8, 10), 16)
+						this.operateDetail.blow[1].num = parseInt(item.slice(10, 12), 16)
+						this.operateDetail.blow[2].num = parseInt(item.slice(12, 14), 16)
+						this.operateDetail.blow[3].num = parseInt(item.slice(14, 16), 16)
+						this.operateDetail.blow[4].num = parseInt(item.slice(16, 18), 16)
+						break;
+					case "05":
+						this.operateDetail.press[6].num = parseInt(item.slice(8, 10), 16)
+						this.operateDetail.press[7].num = parseInt(item.slice(10, 12), 16)
+						break;
+					case "06":
+						this.operateDetail.AED[0].title = parseInt(item.slice(8, 10), 16) == 0 ? '关机' : '开机时间不对';
+						switch (item.slice(10, 12)) {
+							case "00":
+								this.operateDetail.AED[1].title = '电极未插入';
+								break;
+							case "01":
+								this.operateDetail.AED[1].title = '电极插入次序不对';
+								break;
+							case "02":
+								this.operateDetail.AED[1].title = '电极贴的位置不对';
+								break;
+
+						}
+						switch (item.slice(12, 14)) {
+							case "01":
+								this.operateDetail.AED[2].title = '正确除颤';
+								break;
+							case "02":
+								this.operateDetail.AED[2].title = '危险操作';
+								break;
+							case "03":
+								this.operateDetail.AED[2].title = '错误除颤';
+								break;
+
+						}
+						break;
+					case "09":
+						if (item.slice(8, 10) == "00") {
+							this.operateList[0].name = "意识未判断";
+							this.operateList[0].isCorrect = false
+						} else {
+							this.operateList[0].name = "意识判断"
+							this.operateList[0].isCorrect = true
+						}
+						if (item.slice(10, 12) == "00") {
+							this.operateList[1].name = "未检测到动脉";
+							this.operateList[1].isCorrect = false
+						} else {
+							this.operateList[1].name = "检测动脉"
+							this.operateList[1].isCorrect = true
+						}
+						if (item.slice(12, 14) == "00") {
+							this.operateList[2].name = "未抬头开放气道";
+							this.operateList[2].isCorrect = false
+						} else {
+							this.operateList[2].name = "抬头开放气道"
+							this.operateList[2].isCorrect = true
+						}
+						break;
+					case "0c":
+						console.log('询问当前用户id')
+						break;
+
+
+
+
+				}
+			},
+			handleSubmit() {
 				// 老师的账号和课程id的记录
 			},
 			echartsInit() {
 				// 定时器
 				this.timer3 = setTimeout(() => {
 					this.timer1 = setInterval(() => {
-					
+
 						this.option1.xAxis[1].data = this.option1.xAxis[1].data.map(item => {
 							item += 2
 							return item
@@ -455,7 +574,7 @@
 						// this.optio.n1.xAxis[1].data.push(1)
 					}, 2000)
 				}, 8000)
-				
+
 			},
 			random(min, max) {
 				return Math.floor(Math.random() * (max - min)) + min
@@ -473,16 +592,16 @@
 						uni.showToast({
 							title: '请打开蓝牙',
 							duration: 1000,
-							icon:'none'
+							icon: 'none'
 						})
 						if (err.errCode === 10001) {
 							// 监听蓝牙适配器状态改变
-							uni.onBluetoothAdapterStateChange((res)=> {
+							uni.onBluetoothAdapterStateChange((res) => {
 								console.log('BluetoothAdapterStateChange', +res);
 								if (res.available) {
 									this.startBluetoothDevicesDiscovery()
 								}
-			
+
 							})
 						}
 					}
@@ -490,7 +609,7 @@
 			},
 			// 开始搜寻蓝牙外围设备
 			startBluetoothDevicesDiscovery() {
-			
+
 				if (deviceDiscover) {
 					return
 				}
@@ -514,7 +633,7 @@
 						if (!device.name && !device.localName) {
 							return
 						}
-						console.log('device',device);
+						console.log('device', device);
 						//如果名字相同连接设备
 						if (device.name == devicename) {
 							that.createBLEConnection(device.deviceId);
@@ -527,7 +646,7 @@
 							})
 						}
 					})
-			
+
 				})
 			},
 			// 创建连接
@@ -539,15 +658,15 @@
 							title: '连接成功'
 						})
 						console.log('createBLEConnection', res);
-						setTimeout(()=>{
+						setTimeout(() => {
 							this.getBLEDeviceServices(deviceId);
-						},1000)
+						}, 1000)
 					},
 					fail: (err) => {
 						console.log('创建连接失败')
 					}
 				})
-				
+
 			},
 			// 停止蓝牙搜索
 			stopBluetoothDevicesDiscovery() {
@@ -561,7 +680,7 @@
 			getBLEDeviceServices(deviceId) {
 				// console.log(111,deviceId)
 				let that = this;
-				uni.getBLEDeviceServices({  
+				uni.getBLEDeviceServices({
 					deviceId: deviceId,
 					success: (service) => {
 						let all_UUID = service.services; //取出所有的服务
@@ -577,16 +696,16 @@
 							if (UUID_slice == 'FEE0' || UUID_slice == 'fee0') {
 								let index_uuid = index;
 								that.serviceId = all_UUID[index_uuid].uuid //确定需要的服务UUID
-								
+
 							};
 						};
 						console.log('需要的服务UUID', that.serviceId)
 						that.getBLEDeviceCharacteristics(); //调用获取特征值函数
 					},
-					fail:(err)=>{ 
-						console.log('获取服务失败',err)
+					fail: (err) => {
+						console.log('获取服务失败', err)
 					}
-			
+
 				})
 			},
 			// 获取所有服务的特征值
@@ -613,8 +732,8 @@
 							if (characteristics_slice == 'FEE1' || characteristics_slice == 'fee1') {
 								let index_uuid = index;
 								that.notycharacteristicsId = characteristics[index_uuid].uuid //需确定要的使能UUID
-								that.characteristicsId= characteristics[index_uuid].uuid //暂时确定的写入UUID
-									// console.log('id1'+characteristicsId)
+								that.characteristicsId = characteristics[index_uuid].uuid //暂时确定的写入UUID
+								// console.log('id1'+characteristicsId)
 								/* 遍历获取characteristicsId */
 								for (let index = 0; index < characteristics_length; index++) {
 									let characteristics_UUID = characteristics[index].uuid; //取出特征值里面的UUID
@@ -623,7 +742,7 @@
 									if (characteristics_slice == 'FEE2' || characteristics_slice == 'fee2') {
 										let index_uuid = index;
 										that.characteristicsId = characteristics[index_uuid].uuid //确定的写入UUID
-			
+
 									};
 								};
 							};
@@ -631,12 +750,12 @@
 						console.log('使能characteristicsId', that.notycharacteristicsId);
 						console.log('写入characteristicsId', that.characteristicsId);
 						that.notycharacteristics(); //使能事件
-			
+
 					},
 					fail: (err) => {
 						console.log('getBLEDeviceCharacteristics', err)
 					}
-			
+
 				})
 			},
 			/* 使能函数 */
@@ -650,107 +769,92 @@
 					serviceId: that.serviceId,
 					characteristicId: that.notycharacteristicsId,
 					state: true,
-					success: (res)=> {
+					success: (res) => {
 						console.log('使能成功', res);
 						/* 设备返回值 */
-						uni.onBLECharacteristicValueChange((res) =>{
-							
+						uni.onBLECharacteristicValueChange((res) => {
+
 							let result = res.value;
 							let hex = that.buf2hex(result);
-							hex = hex+msg
+							hex = hex + msg
 							// console.log('返回的值', hex);
 							let resObj = that.parse(hex)
-							msg =resObj.slice
-							// console.log(resObj)
-							resObj.strArr.map((item,index)=>{
-								let category = item.slice(6,8)
-								switch(category){
-								    case "02":
-								    if(this.isStart){
-										let obj =  that.parse02(item)
-										// that.list.press.deep = obj.pressDeep;
-										// that.list.cui.deep = obj.cui
-										// that.option1.series.data.push(obj.pressDeep)
-										if (that.option1.series[0].data.length > 500) {
-											that.option1.series[0].data.shift()
-											// console.log(this.option1.sseries[0].data)
-										}
-										// console.log(this.option1.series[0].data)
-										that.option1.series[0].data.push(obj.pressDeep)
-										// that.dataArray.push(obj.pressDeep) 
-										
-										console.log(obj.pressDeep,obj.cui) 
-									}  
-								}
+							// console.log(hex)
+							msg = resObj.slice
+							
+							resObj.strArr.map((item, index) => {
+								let category = item.slice(6, 8)
+								// 
+								that.switchFun(category, item)
 							})
 						});
 					},
-			
+
 					fail: function(res) {
 						console.log('使能失败', res);
 					}
 				})
 			},
-			
-			
+
+
 			/* ArrayBuffer类型数据转为16进制字符串 */
-			    buf2hex (buffer) { // buffer is an ArrayBuffer
-			        return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
-			    },
-			
-				    
-				
-				 parse02(str){
+			buf2hex(buffer) { // buffer is an ArrayBuffer
+				return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
+			},
+
+
+
+			parse02(str) {
 				let i = 8;
-				let pressDeep = parseInt(str.slice(8,10),16)//按压距离
-				let cui = parseInt(parseInt(str.slice(10,12),16)<<8)+parseInt(str.slice(12,14),16)
-				let position = str.slice(14,16)
+				let pressDeep = parseInt(str.slice(8, 10), 16) //按压距离
+				let cui = parseInt(parseInt(str.slice(10, 12), 16) << 8) + parseInt(str.slice(12, 14), 16)
+				let position = str.slice(14, 16)
 				return {
-				    pressDeep,
-				    cui,
-				    position
+					pressDeep,
+					cui,
+					position
 				}
-				},
-			 parse(str){
-			    let exp = /a55a/g
-			    let tap = true;
-			    let indexArr = []
-			    let strArr = []
-			    let obj = {}
-			    while(tap){
-			        let res = exp.exec(str);
-			        if(res){
-			            indexArr.push(res.index)
-			        }else{
-			            tap = false;
-			        }
-			    }
-			    
-			    for (let i = 0; i < indexArr.length; i++) {
-			        // 获取长度
-			        let length = parseInt(str.slice(indexArr[i]+4,indexArr[i]+6),16)*2 +6
-			        // indexArr[i]+4==str.length?length=0:length=length
-			        // console.log(indexArr[i]+length)
-			        if(indexArr[i]+length-1<str.length){
-			            let strRes = str.slice(indexArr[i],indexArr[i]+length)
-			            strArr.push(strRes)
-			            if(i==indexArr.length-1){
-			                strRes = str.slice(indexArr[i]+length)
-			                obj.slice = strRes
-			                // console.log(strRes)
-			            }
-			        }else{
-			            let strRes = str.slice(indexArr[i])
-			            obj.slice = strRes
-			            // console.log(indexArr[i]+length)
-			        }
-			        
-			    }
-			    if(indexArr.pop())
-			    return {
-			        strArr,
-			        ...obj
-			    }
+			},
+			parse(str) {
+				let exp = /a55a/g
+				let tap = true;
+				let indexArr = []
+				let strArr = []
+				let obj = {}
+				while (tap) {
+					let res = exp.exec(str);
+					if (res) {
+						indexArr.push(res.index)
+					} else {
+						tap = false;
+					}
+				}
+
+				for (let i = 0; i < indexArr.length; i++) {
+					// 获取长度
+					let length = parseInt(str.slice(indexArr[i] + 4, indexArr[i] + 6), 16) * 2 + 6
+					// indexArr[i]+4==str.length?length=0:length=length
+					// console.log(indexArr[i]+length)
+					if (indexArr[i] + length - 1 < str.length) {
+						let strRes = str.slice(indexArr[i], indexArr[i] + length)
+						strArr.push(strRes)
+						if (i == indexArr.length - 1) {
+							strRes = str.slice(indexArr[i] + length)
+							obj.slice = strRes
+							// console.log(strRes)
+						}
+					} else {
+						let strRes = str.slice(indexArr[i])
+						obj.slice = strRes
+						// console.log(indexArr[i]+length)
+					}
+
+				}
+				// if (indexArr.pop())
+					return { 
+						strArr,
+						...obj
+					}
 			},
 
 
@@ -780,20 +884,21 @@
 				})
 				// 考试的时候输入老师账号和课程id
 				console.log(id)
-				if(id==2){
+				if (id == 2) {
 					this.$refs.popup.show()
 				}
 			},
 			//上传训练数据
-						submitTrain(){
-							uni.request({
-								url:'/record/insert',
-								method:'POST',
-								data:{
-									
-								}
-							})
-		}
+			submitTrain() {
+				uni.request({
+					url: '/record/insert',
+					method: 'POST',
+					data: {
+
+					}
+				})
+			},
+
 		}
 	}
 </script>

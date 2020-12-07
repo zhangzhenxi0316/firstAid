@@ -426,7 +426,17 @@ var render = function() {
                           attrs: { _i: "32-" + $31 }
                         },
                         [
-                          _c("uni-icons", { attrs: { _i: "33-" + $31 } }),
+                          _c("uni-icons", {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm._$g("33-" + $31, "v-show"),
+                                expression: "_$g((\"33-\"+$31),'v-show')"
+                              }
+                            ],
+                            attrs: { _i: "33-" + $31 }
+                          }),
                           _c("v-uni-text", { attrs: { _i: "34-" + $31 } }, [
                             _vm._v(_vm._$g("34-" + $31, "t0-0"))
                           ])
