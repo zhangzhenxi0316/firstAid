@@ -196,7 +196,7 @@
 							},
 						},
 						{
-							position: 'bottom',
+							position: 'top',
 							boundaryGap: false, // 坐标的刻度是否在中间 
 							data: [0, 2, 4, 6, 8, 10], //数据
 							show: true,
@@ -220,7 +220,9 @@
 						type: 'value',
 						// data:[100,200,300,400]
 						min: 0,
-						max: 300
+						max: 500,
+						splitNumber:2,
+						inverse: true
 					}],
 					series: [{
 						name: '频率',
